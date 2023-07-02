@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% block content %}
+<link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+{% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+        {{ message | safe }}
+    </div>
+{% endfor %}
+
+<div class="bg-light p-5 rounded">
+  <form action="/Food/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Ordered/Restarant Name</label>
+      <input type="text" class="form-control" id="ParterName" name="ParterName" aria-describedby="emailHelp">
+      <div id="emailHelp" class="form-text">Ordered or Restarant Name</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Time</label>
+      <input type="date" class="form-control" id="Time" name="Time" required>
+      <div id="emailHelp" class="form-text">Ordered or Bill date and time</div>
+       <!-- <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="thimonth" name="thismonth">
+        <label class="form-check-label" for="exampleCheck1">EMI Starts this month (If Yes Click on checkbox)</label>
+      </div> -->
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Amount</label>
+      <input type="number" class="form-control" id="Amount" name="Amount" aria-describedby="emailHelp">
+      <div id="emailHelp" class="form-text">Total Amount</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">PaidBy</label>
+      <select class="form-select" name="Paidby">
+        <option value="self">self</option>
+        <option value="Others">Others</option>
+      </select>
+      <div id="emailHelp" class="form-text">Who paid amount</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Proof</label>
+      <input type="file" class="form-control" id="Proof" name="Proof">
+      <div id="emailHelp" class="form-text">Proof of bill or ordered Screenshot</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  </div>
+
+  <br>
+  <div class="bg-light p-1 rounded">
+    <div id="emailHelp" class="form-text">Note : For more details click on ParterName Row. To edit row click on show proof/add proof there you can edit</div>
+    <br>
+    <table id="LoanTable" class="display" style="width:100%">
+      <thead>
+          <tr>
+              <th class="all">ParterName</th>
+              <th class="desktop">Time</th>
+              <th class="all">Amount</th>
+              <th class="desktop">Paidby</th>
+              <th class="desktop">Proof</th>
+              <th class="all">Actions</th>
+          </tr>
+      </thead>
+      <tfoot style="display: table-header-group;">
+        <tr>
+          <th class="all">ParterName</th>
+          <th class="all">Time</th>
+          <th class="desktop">Paidby</th>
+          <th class="desktop">Proof</th>
+          
+        </tr>
+    </tfoot>
+      <tbody>
+        {% for Food in FoodData %}
+          <tr>
+              <td>{{Food.ParterName}}</td>
+              <td>{{Food.Time}}</td>
+              <td>{{Food.Amount}}</td>
+              <td>{{Food.Paidby}}</td>
+              {% if Food.Proof %}
+                <td><button type="button" class="building-link btn btn-primary" data-bs-toggle="modal" data-bs-target="#ShowModal" data-name="{{Food.Proof.url}}" data-editlink="{{Food.id}}">
+                  Show Proof
+                </button></td>
+                {% else %}
+                <td>
+                  <a href="{% url 'FoodAddProof' Food.id %}"><button type="button" class="btn btn-outline-primary">Add Proof</button></a>
+                  </td>
+                {% endif %}
+                <td>
+                  <div class="dropdown">
+                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                      <i class="bx bx-dots-vertical-rounded"></i>
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="{% url 'FoodAddProof' Food.id %}"
+                        ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                      >
+                      <a class="dropdown-item" onclick="return confirm('Are you sure?')" href="{% url 'DeleteItem' Food.id model %}"
+                        ><i class="bx bx-trash me-1"></i> Delete</a
+                      >
+                    </div>
+                  </div>
+                </td>
+            </tr>
+          {% endfor %}
+      </tbody>
+      
+  </table>
+  </div>
+  <div class="modal fade" id="ShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Proof Attachment</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <img class="img-fluid" id="building-name" src="" >
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="" id="EditLink"><button type="button" class="btn btn-primary">Edit</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  <script>
+    $(function(){
+  $('#LoanTable').DataTable({
+    responsive: true,
+    initComplete: function () {
+            this.api()
+                .columns()
+                .every(function () {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+ 
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+ 
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                });
+        },
+  });
+});
+
+//    $(document).ready(function() {
+//     var table = $('#LoanTable').DataTable( {
+
+//         responsive: false
+//     } );
+// } );
+  </script>
+
+
+   <script>
+    $('.building-link').click(function(){
+          $("#building-name").attr('src', $(this).data("name"));
+          var editlinkID = "/FoodAddProof/" + $(this).data("editlink")
+
+          $("#EditLink").attr('href', editlinkID)
+     });
+     </script>
+{% endblock content %}

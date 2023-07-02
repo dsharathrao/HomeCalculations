@@ -1,0 +1,394 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="description" content="1. Calculate your monthly mortgage payment, taxes, insurance, and utilities using our free tool! 2. Find out what your monthly payments would be if you paid off your mortgage early! 3. Get an estimate on how much your house could sell for today! 4. Use our calculator to calculate the value of your home! 5. See how much your home could rent for! 6. Find out how much your home is worth! 7. Check out our other calculators! 8. We have more tools available here! 9. Our" />
+		<title>Home Calculations</title>
+		<!-- <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" /> -->
+		
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
+			rel="stylesheet" />
+		<!-- Icons. Uncomment required icon fonts -->
+		<link rel="stylesheet" href="{% static 'fonts/boxicons.css' %}" />
+
+		<!-- Core CSS -->
+		<link rel="stylesheet" href="{% static 'css/core.css' %}" class="template-customizer-core-css" />
+		<link rel="stylesheet" href="{% static 'css/theme-default.css' %}" class="template-customizer-theme-css" />
+		<link rel="stylesheet" href="{% static 'css/demo.css' %}" />
+	
+		<!-- Vendors CSS -->
+		<link rel="stylesheet" href="{% static 'libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+	
+		<link rel="stylesheet" href="{% static 'libs/apex-charts/apex-charts.css' %}" />
+	 <!-- Helpers -->
+	 <script src="{% static 'js/helpers.js' %}"></script>
+	 <script src="{% static 'js/config.js' %}"></script>
+
+	 <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+	</head>
+	<body>
+		<div class="layout-wrapper layout-content-navbar">
+			<div class="layout-container">
+			  <!-- Menu -->
+	  
+			  <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+				<div class="app-brand demo">
+				  <a href="{% url 'index' %}" class="app-brand-link">
+					<img src="{% static 'img/icons/unicons/wallet-info.png' %}" alt class="w-px-40 h-auto rounded-circle" />
+					<span class="app-brand-text demo menu-text fw-bolder ms-2">Calculations</span>
+				  </a>
+	  
+				  <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+					<i class="bx bx-chevron-left bx-sm align-middle"></i>
+				  </a>
+				</div>
+	  
+				<div class="menu-inner-shadow"></div>
+				{% with request.resolver_match.url_name as url_name %}
+				<ul class="menu-inner py-1">
+				  <!-- Dashboard -->
+				  <li class="menu-item {% if url_name == 'index' %}active{% endif %}">
+					<a href="{% url 'index' %}" class="menu-link">
+					  <i class="menu-icon tf-icons bx bx-home-circle"></i>
+					  <div data-i18n="Analytics">Dashboard</div>
+					</a>
+				  </li>
+				  <li class="menu-header small text-uppercase"><span class="menu-header-text">Expenses</span></li>
+				  <!-- Forms -->
+				 
+				  <li class="menu-item {% if url_name == 'Loans' %}active{% endif %}">
+					<a
+					  href="{% url 'Loans' %}"
+					  
+					  class="menu-link"
+					>
+					  <i class="menu-icon tf-icons bx bx-money"></i>
+					  <div data-i18n="Loans">Loans</div>
+					</a>
+				  </li>
+				  <li class="menu-item {% if url_name == 'Food' %}active{% endif %}">
+					<a
+					  href="{% url 'Food' %}"
+					  
+					  class="menu-link"
+					>
+					  <i class="menu-icon tf-icons bx bx-food-menu"></i>
+					  <div data-i18n="Food">Food</div>
+					</a>
+				  </li>
+				  <li class="menu-item {% if url_name == 'Travel' %}active{% endif %}">
+					<a
+					  href="{% url 'Travel' %}"
+					  
+					  class="menu-link"
+					>
+					  <i class="menu-icon tf-icons bx bx-bus"></i>
+					  <div data-i18n="Travel">Travel</div>
+					</a>
+				  </li>
+				  <li class="menu-item {% if url_name == 'RentandUtilities' %}active{% endif %}">
+					<a
+					  href="{% url 'RentandUtilities' %}"
+					  
+					  class="menu-link"
+					>
+					  <i class="menu-icon tf-icons bx bx-home"></i>
+					  <div data-i18n="home">Rent & Utilities</div>
+					</a>
+				  </li>
+				  <li class="menu-item {% if url_name == 'Shopping' %}active{% endif %}">
+					<a
+					  href="{% url 'Shopping' %}"
+					  
+					  class="menu-link"
+					>
+					  <i class="menu-icon tf-icons bx bx-shopping-bag"></i>
+					  <div data-i18n="Shopping">Shopping</div>
+					</a>
+				  </li>
+				  <li class="menu-item {% if url_name == 'Medical' %}active {% endif %}">
+					<a
+					  href="{% url 'Medical' %}"
+					  
+					  class="menu-link"
+					>
+					  <i class="menu-icon tf-icons bx bx-plus-medical"></i>
+					  <div data-i18n="Medical">Medical</div>
+					</a>
+				  </li>
+				  <li class="menu-item {% if url_name == 'OtherExpenses' %}active {% endif %}">
+					<a
+					  href="{% url 'OtherExpenses' %}"
+					  
+					  class="menu-link"
+					>
+					  <i class="menu-icon tf-icons bx bx-coin"></i>
+					  <div data-i18n="Other">Other Expenses</div>
+					</a>
+				  </li>
+				  <!-- <li class="menu-item">
+					<a href="javascript:void(0);" class="menu-link menu-toggle">
+					  <i class="menu-icon tf-icons bx bx-detail"></i>
+					  <div data-i18n="Form Layouts">Form Layouts</div>
+					</a>
+					<ul class="menu-sub">
+					  <li class="menu-item">
+						<a href="form-layouts-vertical.html" class="menu-link">
+						  <div data-i18n="Vertical Form">Vertical Form</div>
+						</a>
+					  </li>
+					  <li class="menu-item">
+						<a href="form-layouts-horizontal.html" class="menu-link">
+						  <div data-i18n="Horizontal Form">Horizontal Form</div>
+						</a>
+					  </li>
+					</ul>
+				  </li> -->
+				  <li class="menu-header small text-uppercase">
+					<span class="menu-header-text">Savings</span>
+				  </li>
+
+				  <li class="menu-item {% if url_name == 'SalaryCredited' %}active {% endif %}">
+					<a
+					  href="{% url 'SalaryCredited' %}"
+					  
+					  class="menu-link"
+					>
+					  <i class="menu-icon tf-icons bx bx-rupee"></i>
+					  <div data-i18n="Other">Salary</div>
+					</a>
+				  </li>
+				  <li class="menu-item {% if url_name == 'Investments' %}active {% endif %}">
+					<a
+					  href="{% url 'Investments' %}"
+					  
+					  class="menu-link"
+					>
+					  <i class="menu-icon tf-icons bx bx-slider"></i>
+					  <div data-i18n="Other">Investments</div>
+					</a>
+				  </li>
+				
+				  <li class="menu-header small text-uppercase">
+					<span class="menu-header-text">Account</span>
+				  </li>
+				  <li class="menu-item">
+					<a href="javascript:void(0);" class="menu-link menu-toggle">
+					  <i class="menu-icon tf-icons bx bx-dock-top"></i>
+					  <div data-i18n="Account Settings">Account Settings</div>
+					</a>
+					<ul class="menu-sub">
+						<li class="menu-item {% if url_name == 'Profile-Update' %}active {% endif %}">
+						<a href="{% url 'Profile-Update' %}" class="menu-link">
+						  <div data-i18n="Account">Account</div>
+						</a>
+					  </li>
+					  <!-- <li class="menu-item {% if url_name == 'Notifications' %}active {% endif %}">
+						<a href="{% url 'Notifications' %}" class="menu-link">
+						  <div data-i18n="Notifications">Notifications</div>
+						</a>
+					  </li> -->
+					  <!-- <li class="menu-item">
+						<a href="pages-account-settings-connections.html" class="menu-link">
+						  <div data-i18n="Connections">Connections</div>
+						</a>
+					  </li> -->
+					</ul>
+				  </li>
+				  <li class="menu-item">
+					<a href="javascript:void(0);" class="menu-link menu-toggle">
+					  <i class="menu-icon tf-icons bx bx-lock-open-alt"></i>
+					  <div data-i18n="Authentications">Authentications</div>
+					</a>
+					<ul class="menu-sub">
+					  <li class="menu-item">
+						<a href="auth-login-basic.html" class="menu-link" >
+						  <div data-i18n="Basic">Add/Remove Member</div>
+						</a>
+					  </li>
+					  <li class="menu-item">
+						<a href="auth-register-basic.html" class="menu-link" >
+						  <div data-i18n="Basic">Permissions</div>
+						</a>
+					  </li>
+					  <li class="menu-item">
+						<a href="auth-forgot-password-basic.html" class="menu-link" >
+						  <div data-i18n="Basic">Reset Member Password</div>
+						</a>
+					  </li>
+					</ul>
+				  </li>
+		  
+				  <!-- Components -->
+				  
+				  <!-- Forms & Tables -->
+				  
+				 
+				  <!-- Misc -->
+				  <li class="menu-header small text-uppercase"><span class="menu-header-text">Contact</span></li>
+				  <li class="menu-item {% if url_name == 'Support' %}active {% endif %}">
+					<a href="{% url 'Support' %}" class="menu-link">
+					  <i class="menu-icon tf-icons bx bx-support"></i>
+					  <div data-i18n="Support">Support</div>
+					</a>
+				  </li>
+				  <li class="menu-item">
+					<a
+					  href="#"
+					  
+					  class="menu-link"
+					>
+					  <i class="menu-icon tf-icons bx bx-file"></i>
+					  <div data-i18n="Documentation">Documentation</div>
+					</a>
+				  </li>
+				  <li class="menu-item">					
+					</a>
+				  </li>
+				</ul>
+				{% endwith %} 
+			  </aside>
+			  <!-- / Menu -->
+	  
+			  <!-- Layout container -->
+			  <div class="layout-page">
+				<!-- Navbar -->
+	  
+				<nav
+				  class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme"
+				  id="layout-navbar"
+				>
+				  <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
+					<a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+					  <i class="bx bx-menu bx-sm"></i>
+					</a>
+				  </div>
+	  
+				  <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+					<!-- Search -->
+					<div class="navbar-nav align-items-center">
+					  <div class="nav-item d-flex align-items-center">
+						<i class="bx bx-search fs-4 lh-0"></i>
+						<input
+						  type="text"
+						  class="form-control border-0 shadow-none"
+						  placeholder="Search..."
+						  aria-label="Search..."
+						/>
+					  </div>
+					</div>
+					<!-- /Search -->
+	  
+					<ul class="navbar-nav flex-row align-items-center ms-auto">
+					  <!-- Place this tag where you want the button to render. -->
+					  <!-- User -->
+					  <li class="nav-item navbar-dropdown dropdown-user dropdown">
+						<a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
+						  <div class="avatar avatar-online">
+							<img src="{{avatar}}" alt class="w-px-40 h-auto rounded-circle" />
+						  </div>
+						</a>
+						<ul class="dropdown-menu dropdown-menu-end">
+						  <li>
+							<a class="dropdown-item" href="#">
+							  <div class="d-flex">
+								<div class="flex-shrink-0 me-3">
+								  <div class="avatar avatar-online">
+									<img src="{{avatar}}" alt class="w-px-40 h-auto rounded-circle" />
+								  </div>
+								</div>
+								<div class="flex-grow-1">
+								  <span class="fw-semibold d-block">{{ request.user.username }}</span>
+								  <!-- <small class="text-muted">Admin</small> -->
+								</div>
+							  </div>
+							</a>
+						  </li>
+						  <li>
+							<div class="dropdown-divider"></div>
+						  </li>
+						  <li>
+							<a class="dropdown-item" href="{% url 'Profile-Update' %}">
+							  <i class="bx bx-user me-2"></i>
+							  <span class="align-middle">My Profile</span>
+							</a>
+						  </li>
+						  <li>
+							<a class="dropdown-item" href="{% url 'password-change' %}">
+							  <i class="bx bx-lock me-2"></i>
+							  <span class="align-middle">Change Password</span>
+							</a>
+						  </li>
+						  <li>
+							<a class="dropdown-item" href="#">
+							  <i class="bx bx-cog me-2"></i>
+							  <span class="align-middle">Settings</span>
+							</a>
+						  </li>
+						  <!-- <li>
+							<a class="dropdown-item" href="#">
+							  <span class="d-flex align-items-center align-middle">
+								<i class="flex-shrink-0 bx bx-credit-card me-2"></i>
+								<span class="flex-grow-1 align-middle">Billing</span>
+								<span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
+							  </span>
+							</a>
+						  </li> -->
+						  <li>
+							<div class="dropdown-divider"></div>
+						  </li>
+						  <li>
+							<a class="dropdown-item" href="{% url 'logout' %}">
+							  <i class="bx bx-power-off me-2"></i>
+							  <span class="align-middle">Log Out</span>
+							</a>
+						  </li>
+						</ul>
+					  </li>
+					  <!--/ User -->
+					</ul>
+				  </div>
+				</nav>
+	  
+				<!-- / Navbar -->
+	  
+				<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+				
+				<script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+				<script src="https://cdn.datatables.net/rowreorder/1.2.8/js/dataTables.rowReorder.min.js"></script>
+				<script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+	   
+		<main class="container">{% block content %}{% endblock content %}</main>
+		
+		 <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <!-- <script src="{% static 'libs/jquery/jquery.js' %}"></script> -->
+	
+    <script src="{% static 'libs/popper/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <script src="{% static 'libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+
+    <script src="{% static 'js/menu.js' %}"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="{% static 'libs/apex-charts/apexcharts.js' %}"></script>
+
+    <!-- Main JS -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- Page JS -->
+    <script src="{% static 'js/dashboards-analytics.js' %}"></script>
+
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+		
+	</body>
+</html>

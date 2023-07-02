@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% block content %}
+<link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+{% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+        {{ message | safe }}
+    </div>
+{% endfor %}
+
+<div class="bg-light p-5 rounded">
+  <form action="/Loans/" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Loan Taken From</label>
+      <input type="text" class="form-control" id="Loantaken" name="Loantaken" aria-describedby="emailHelp">
+      <div id="emailHelp" class="form-text">BankName or Person Name</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Amount</label>
+      <input type="number" class="form-control" id="Amount" name="Amount" required>
+      <div id="emailHelp" class="form-text">Total Amount taken</div>
+      <!-- <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="thimonth" name="thismonth">
+        <label class="form-check-label" for="exampleCheck1">Starts this month (If Yes Click on checkbox)</label>
+      </div> -->
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">EMI Months</label>
+      <input type="date" class="form-control" id="EMIStart" name="EMIStart" required>
+      <div id="emailHelp" class="form-text">EMI Starts date</div>
+       <div class="mb-3 form-check">
+        <input type="checkbox" class="form-check-input" id="thimonth" name="thismonth">
+        <label class="form-check-label" for="exampleCheck1">EMI Starts this month (If Yes Click on checkbox)</label>
+      </div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">EMI Months</label>
+      <input type="number" class="form-control" id="EMIMonths" name="EMIMonths" required>
+      <div id="emailHelp" class="form-text">Total EMI Months</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">EMI Amount</label>
+      <input type="number" class="form-control" id="EMIAmount" name="EMIAmount">
+      <div id="emailHelp" class="form-text">Per Month Amount to pay</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  </div>
+
+  <br>
+  <div class="bg-light p-1 rounded">
+    <div id="emailHelp" class="form-text">For more details click on LoanTaken row. To edit row click on show proof/add proof there you can edit</div>
+    <br>
+    <table id="LoanTable" class="display" style="width:100%">
+      <thead>
+          <tr>
+              <th class="all">LoanTaken</th>
+              <th class="desktop">Amount</th>
+              <th class="all">EMI Month</th>
+              <th class="desktop">EMI Amount</th>
+              <th class="desktop">Paid</th>
+              <th class="desktop">Proof</th>
+              <th class="desktop">Add Proof</th>
+              <th class="all">Actions</th>
+              
+          </tr>
+      </thead>
+      <tfoot style="display: table-header-group;">
+        <tr>
+          <th class="all">LoanTaken</th>
+          <th class="desktop">Amount</th>
+          <th class="all">EMI Month</th>
+          <th class="desktop">EMI Amount</th>
+          <th class="desktop">Paid</th>
+          <th class="desktop">Proof</th>
+          <th class="desktop">Add Proof</th>
+        </tr>
+    </tfoot>
+      <tbody>
+        {% for Loan in LoanData %}
+          <tr>
+              <td>{{Loan.LoanTaken}}</td>
+              <td>{{Loan.Amount}}</td>
+              <td>{{Loan.EMIMonth}}</td>
+              <td>{{Loan.EMIAmount}}</td>
+              
+              {% if Loan.Paid %}
+              <td>Yes</td>
+              {% else %}
+              <td>No</td>
+              {% endif %}
+              {% if Loan.Paid %}
+                {% if Loan.Proof %}
+                <td><button type="button" class="building-link btn btn-primary" data-bs-toggle="modal" data-bs-target="#ShowModal" data-name="{{Loan.Proof.url}}" data-editlink="{{Loan.id}}">
+                  Show Proof
+                </button></td>
+                {% else %}
+                <td>Submitted without Proof</td>
+                {% endif %}
+              {% else %}
+              <td>No Proof Added</td>
+              {% endif %}
+              {% if Loan.Paid %} 
+              <td>
+                <a href="{% url 'LoanAddProof' Loan.id %}"><button type="button" class="btn btn-outline-primary">Edit Proof</button></a>
+                </td>
+              
+      {% else %}
+      <td>
+        <a href="{% url 'LoanAddProof' Loan.id %}"><button type="button" class="btn btn-outline-primary">Add Proof</button></a>
+        </td>
+      {% endif %}
+      <td>
+        <div class="dropdown">
+          <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+            <i class="bx bx-dots-vertical-rounded"></i>
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="{% url 'LoanAddProof' Loan.id %}"
+              ><i class="bx bx-edit-alt me-1"></i> Edit</a
+            >
+            <a class="dropdown-item" onclick="return confirm('Are you sure?')" href="{% url 'DeleteItem' Loan.id model %}"
+              ><i class="bx bx-trash me-1"></i> Delete</a
+            >
+          </div>
+        </div>
+      </td>
+          </tr>
+          {% endfor %}
+      </tbody>
+      
+  </table>
+  </div>
+  <div class="modal fade" id="ShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Proof Attachment</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <img class="img-fluid" id="building-name" src="" >
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <a href="" id="EditLink"><button type="button" class="btn btn-primary">Edit</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+
+  
+  <script>
+    $(function(){
+  $('#LoanTable').DataTable({
+    responsive: true,
+    initComplete: function () {
+            this.api()
+                .columns()
+                .every(function () {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+ 
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+ 
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                });
+        },
+  });
+});
+
+//    $(document).ready(function() {
+//     var table = $('#LoanTable').DataTable( {
+
+//         responsive: false
+//     } );
+// } );
+  </script>
+
+
+   <script>
+    $('.building-link').click(function(){
+          $("#building-name").attr('src', $(this).data("name"));
+          var editlinkID = "/LoanAddProof/" + $(this).data("editlink")
+
+          $("#EditLink").attr('href', editlinkID)
+     });
+     </script>
+{% endblock content %}

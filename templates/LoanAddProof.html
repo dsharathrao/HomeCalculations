@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+        {{ message | safe }}
+    </div>
+{% endfor %}
+
+<div class="bg-light p-5 rounded">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Loan Taken From</label>
+      <input type="text" class="form-control" id="Loantaken" name="Loantaken" aria-describedby="emailHelp" value="{{UpdateColValue.LoanTaken}}" disabled>
+      <div id="emailHelp" class="form-text">BankName or Person Name</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Amount</label>
+      <input type="number" class="form-control" id="Amount" name="Amount" value="{{UpdateColValue.Amount}}" disabled>
+      <div id="emailHelp" class="form-text">Total Amount taken</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">EMI Month</label>
+      <input type="number" class="form-control" id="EMIMonth" name="EMIMonth"  placeholder="{{UpdateColValue.EMIMonth}}" disabled>
+      <div id="emailHelp" class="form-text">EMI Month</div>
+    </div>
+    <div class="mb-3">
+        <div class="form-group">
+            <label for="exampleFormControlSelect1">Paid</label>
+            <select class="form-control" id="exampleFormControlSelect1" name="Paid">
+              <option>Yes</option>
+              <option>No</option>
+            </select>
+          </div>
+          <div id="emailHelp" class="form-text">If Paid Yes or else No</div>
+      </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">EMI Amount</label>
+      <input type="number" class="form-control" id="EMIAmount" name="EMIAmount" required>
+      <div id="emailHelp" class="form-text">Per Month Amount to pay</div>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Proof</label>
+        <input type="file" class="form-control" id="ProofAttachment" name="ProofAttachment">
+        <div id="emailHelp" class="form-text">Add Proof JPG/PNG</div>
+      </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  </div>
+  {% endblock content %}

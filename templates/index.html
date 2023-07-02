@@ -1,0 +1,305 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<style>
+  #dataframe{
+    position: relative;
+  }
+#dataframe_wrapper{
+  background-color: white;
+}
+</style>
+
+{% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+        {{ message | safe }}
+    </div>
+{% endfor %}
+
+<div class="bg-light p-1 rounded">
+    <!-- <h5>This is beta version 1.0 and demo purpose. Please wait for Complete Version.</h5> -->
+
+   <div class="container-xxl flex-grow-1 container-p-y">
+    <div class="row">
+      <div class="col-lg-12 mb-4 order-0">
+        <div class="card">
+          <div class="d-flex align-items-end row">
+            <div class="col-sm-7">
+              <div class="card-body">
+                <h5 class="card-title text-primary">Welcome {{request.user}}! 🎉</h5>
+                <p class="mb-4">
+                  You have done <span class="fw-bold">22%</span> more saved this month as compared to last month.
+                </p>
+
+                <a href="javascript:;" class="btn btn-sm btn-outline-primary">View Data</a>
+              </div>
+            </div>
+            <div class="col-sm-5 text-center text-sm-left">
+              <div class="card-body pb-0 px-0 px-md-4">
+                <img src="{% static 'img/illustrations/man-with-laptop-light.png' %}" height="140" alt="View Badge User" data-app-dark-img="illustrations/man-with-laptop-dark.png" data-app-light-img="illustrations/man-with-laptop-light.png">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 mb-4 order-0">
+        <h5 class="card-header">This Month expense wise total amount spends</h5>
+          <table id="dataframe" class="display" style="width:100%" style="background-color: white;">
+         
+            <thead>
+              <tr>
+                <th>Expense Name</th>
+                <th>Month</th>
+                <th>total Amount Spend</th>
+              </tr>
+            </thead>
+              <tfoot style="display: table-header-group;">
+                <tr>
+                  <th>Expense</th>
+                  <th>month</th>
+                </tr>
+            </tfoot>
+            <tbody>
+              <!-- jinja2 Technique --> 
+              {% for i in MonthwiseDataFrame %}
+                <tr>
+                  <td>{{i.ExpenseName}}</td>
+                  <td>{{i.Month}}</td>
+                  <td>{{i.total_expense|floatformat:"0"}}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+  </div>
+    <div class="col-lg-6 col-md-4 order-1">
+      <h5 class="card-header">As per threshold this month</h5>
+      <div class="row">
+        <div class="col-lg-4 col-md-12 col-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-title d-flex align-items-start justify-content-between">
+                <div class="avatar flex-shrink-0">
+                  <i class="menu-icon tf-icons bx bx-food-menu"></i>
+                </div>
+                <div class="dropdown">
+                  <button class="btn p-0" type="button" id="cardOpt3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt3">
+                    <a class="dropdown-item" href="{% url 'Food' %}">View Data</a>
+                  </div>
+                </div>
+              </div>
+              <span class="fw-semibold d-block mb-1">Food</span>
+              <h5 class="card-title mb-2">&#8377; {{ThismonthdataCompare.Food}}</h5>
+              {% if ThersholdMeetPercentage.Food > 0 and ThersholdMeetPercentage.Food <= 50.0 %}
+              <small class="text-warning fw-semibold"><i class="bx bx-up-arrow-alt"></i> {{ThersholdMeetPercentage.Food|floatformat:"0"}}%</small>
+              {% elif ThersholdMeetPercentage.Food > 50.0 %}
+              <small class="text-danger fw-semibold"><i class="bx bx-up-arrow-alt"></i> {{ThersholdMeetPercentage.Food|floatformat:"0"}}%</small>
+              {% else %}
+              <small class="text-success fw-semibold"><i class="bx bx-down-arrow-alt"></i> {{ThersholdMeetPercentage.Food|floatformat:"0"}}%</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-12 col-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-title d-flex align-items-start justify-content-between">
+                <div class="avatar flex-shrink-0">
+                  <i class="menu-icon tf-icons bx bx-bus" class="rounded"></i>
+                </div>
+                <div class="dropdown">
+                  <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
+                    <a class="dropdown-item" href="{% url 'Travel' %}">View Data</a>
+                  </div>
+                </div>
+              </div>
+              <span>Travel</span>
+              <h5 class="card-title mb-2">&#8377; {{ThismonthdataCompare.Travel}}</h5>
+              {% if ThersholdMeetPercentage.Travel > 0 and ThersholdMeetPercentage.Travel <= 50.0 %}
+              <small class="text-warning fw-semibold"><i class="bx bx-up-arrow-alt"></i> {{ThersholdMeetPercentage.Travel|floatformat:"0"}}%</small>
+              {% elif ThersholdMeetPercentage.Travel > 50.0 %}
+              <small class="text-danger fw-semibold"><i class="bx bx-up-arrow-alt"></i> {{ThersholdMeetPercentage.Travel|floatformat:"0"}}%</small>
+              {% else %}
+              <small class="text-success fw-semibold"><i class="bx bx-down-arrow-alt"></i> {{ThersholdMeetPercentage.Travel|floatformat:"0"}}%</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-12 col-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-title d-flex align-items-start justify-content-between">
+                <div class="avatar flex-shrink-0">
+                  <i class="menu-icon tf-icons bx bx-home" class="rounded"></i>
+                </div>
+                <div class="dropdown">
+                  <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
+                    <a class="dropdown-item" href="{% url 'RentandUtilities' %}">View Data</a>
+                  </div>
+                </div>
+              </div>
+              <span>Rent Utilities</span>
+              <h5 class="card-title mb-2">&#8377; {{ThismonthdataCompare.RentandUtilities}}</h5>
+              {% if ThersholdMeetPercentage.RentandUtilities > 0 and ThersholdMeetPercentage.RentandUtilities <= 50.0 %}
+              <small class="text-warning fw-semibold"><i class="bx bx-up-arrow-alt"></i> {{ThersholdMeetPercentage.RentandUtilities|floatformat:"0"}}%</small>
+              {% elif ThersholdMeetPercentage.RentandUtilities > 50.0 %}
+              <small class="text-danger fw-semibold"><i class="bx bx-up-arrow-alt"></i> {{ThersholdMeetPercentage.RentandUtilities|floatformat:"0"}}%</small>
+              {% else %}
+              <small class="text-success fw-semibold"><i class="bx bx-down-arrow-alt"></i> {{ThersholdMeetPercentage.RentandUtilities|floatformat:"0"}}%</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-12 col-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-title d-flex align-items-start justify-content-between">
+                <div class="avatar flex-shrink-0">
+                  <i class="menu-icon tf-icons bx bx-shopping-bag" class="rounded"></i>
+                </div>
+                <div class="dropdown">
+                  <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
+                    <a class="dropdown-item" href="{% url 'Shopping' %}">View Data</a>
+                  </div>
+                </div>
+              </div>
+              <span>Shopping</span>
+              <h5 class="card-title mb-2">&#8377; {{ThismonthdataCompare.Shopping}}</h5>
+              {% if ThersholdMeetPercentage.Shopping > 0 and ThersholdMeetPercentage.Shopping <= 50.0 %}
+              <small class="text-warning fw-semibold"><i class="bx bx-up-arrow-alt"></i> {{ThersholdMeetPercentage.Shopping|floatformat:"0"}}%</small>
+              {% elif ThersholdMeetPercentage.Shopping > 50.0 %}
+              <small class="text-danger fw-semibold"><i class="bx bx-up-arrow-alt"></i> {{ThersholdMeetPercentage.Shopping|floatformat:"0"}}%</small>
+              {% else %}
+              <small class="text-success fw-semibold"><i class="bx bx-down-arrow-alt"></i> {{ThersholdMeetPercentage.Shopping|floatformat:"0"}}%</small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-12 col-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-title d-flex align-items-start justify-content-between">
+                <div class="avatar flex-shrink-0">
+                  <i class="menu-icon tf-icons bx bx-plus-medical"></i>
+                </div>
+                <div class="dropdown">
+                  <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
+                    <a class="dropdown-item" href="{% url 'Medical' %}">View Data</a>
+                  </div>
+                </div>
+              </div>
+              <span>Medical</span>
+              <h5 class="card-title mb-2">&#8377; {{ThismonthdataCompare.Medical}}</h3>
+                {% if ThersholdMeetPercentage.Medical > 0 and ThersholdMeetPercentage.Medical <= 50.0 %}
+                <small class="text-warning fw-semibold"><i class="bx bx-up-arrow-alt"></i> {{ThersholdMeetPercentage.Medical|floatformat:"0"}}%</small>
+                {% elif ThersholdMeetPercentage.Medical > 50.0 %}
+                <small class="text-danger fw-semibold"><i class="bx bx-up-arrow-alt"></i> {{ThersholdMeetPercentage.Medical|floatformat:"0"}}%</small>
+                {% else %}
+                <small class="text-success fw-semibold"><i class="bx bx-down-arrow-alt"></i> {{ThersholdMeetPercentage.Medical|floatformat:"0"}}%</small>
+                {% endif %}
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-4 col-md-12 col-6 mb-4">
+          <div class="card">
+            <div class="card-body">
+              <div class="card-title d-flex align-items-start justify-content-between">
+                <div class="avatar flex-shrink-0">
+                  <i class="menu-icon tf-icons bx bx-coin" class="rounded"></i>
+                </div>
+                <div class="dropdown">
+                  <button class="btn p-0" type="button" id="cardOpt6" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="bx bx-dots-vertical-rounded"></i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-end" aria-labelledby="cardOpt6">
+                    <a class="dropdown-item" href="{% url 'OtherExpenses' %}">View Data</a>
+                  </div>
+                </div>
+              </div>
+              <span>Other</span>
+              <h5 class="card-title mb-2">&#8377; {{ThismonthdataCompare.OtherExpenses}}</h3>
+                {% if ThersholdMeetPercentage.OtherExpenses > 0 and ThersholdMeetPercentage.OtherExpenses <= 50.0 %}
+                <small class="text-warning fw-semibold"><i class="bx bx-up-arrow-alt"></i> {{ThersholdMeetPercentage.OtherExpenses|floatformat:"0"}}%</small>
+                {% elif ThersholdMeetPercentage.OtherExpenses > 50.0 %}
+                <small class="text-danger fw-semibold"><i class="bx bx-up-arrow-alt"></i> {{ThersholdMeetPercentage.OtherExpenses|floatformat:"0"}}%</small>
+                {% else %}
+                <small class="text-success fw-semibold"><i class="bx bx-down-arrow-alt"></i> {{ThersholdMeetPercentage.OtherExpenses|floatformat:"0"}}%</small>
+                {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+   </div>
+  </div>
+  <script>
+    $(function(){
+  $('#dataframe').DataTable({
+    "pageLength": 5,
+    'columnDefs': [
+    {
+        "targets": 0, // your case first column
+        "className": "text-left",
+        "width": "4%"
+   },
+   {
+        "targets": 1,
+        "className": "text-center",
+   }
+   ,
+   {
+        "targets": 2,
+        "className": "text-center",
+   }
+ ],
+    initComplete: function () {
+            this.api()
+                .columns()
+                .every(function () {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+ 
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                });
+        },
+  });
+});
+
+//    $(document).ready(function() {
+//     var table = $('#LoanTable').DataTable( {
+
+//         responsive: false
+//     } );
+// } );
+  </script>
+
+{% endblock content %}

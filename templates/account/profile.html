@@ -1,0 +1,192 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+        {{ message | safe }}
+    </div>
+{% endfor %}
+
+<div class="bg-light p-5 rounded">
+  <form method="post" enctype="multipart/form-data" id="formOne">
+    {% csrf_token %}
+    <input type="hidden" name="form_type" value="formOne">
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Username</label>
+      <input type="text" class="form-control" id="user" name="user"  value='{{request.user}}' disabled>
+      <div id="emailHelp" class="form-text">Username</div>
+    </div>
+    <div class="card mb-4">
+      <h5 class="card-header">Profile Picture</h5>
+      <!-- Account -->
+      <div class="card-body">
+        <div class="d-flex align-items-start align-items-sm-center gap-4">
+          <img
+            src="{{avatar}}"
+            alt="user-avatar"
+            class="d-block rounded"
+            height="100"
+            width="100"
+            id="uploadedAvatar"
+          />
+          <div class="button-wrapper">
+            <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+              <span class="d-none d-sm-block">Upload new photo</span>
+              <i class="bx bx-upload d-block d-sm-none"></i>
+              <input
+                type="file"
+                id="upload"
+                name="ProfilePic"
+                class="account-file-input"
+                hidden
+                accept="image/png, image/jpeg"
+                onchange="form.submit()"
+              />
+              
+            </label>
+           
+
+            <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+   
+    <!-- <button type="submit" class="btn btn-primary">Update</button> -->
+  </form>
+  </div>
+  <script></script>
+ <h5 class="card-header">Expenses Threshold Limit</h5>
+
+<div class="bg-light p-5 rounded">
+  <div class="form-text">To Change Threshold please change the value and submit. Automatically it will update.</div>
+  <br>
+  <form method="post" enctype="multipart/form-data" id="formTwo">
+    {% csrf_token %}
+    <input type="hidden" name="form_type" value="formTwo">
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Food Expenses Limit</label>
+      <input type="number" class="form-control" id="Food" name="Food" aria-describedby="emailHelp" value="{{ThresholdsData.FoodLimit}}">
+      <div id="emailHelp" class="form-text">If Food expenses more than this you give an alert.</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Travel Expenses Limit</label>
+      <input type="number" class="form-control" id="Travel" name="Travel" aria-describedby="emailHelp" value="{{ThresholdsData.TravelLimit}}">
+      <div id="emailHelp" class="form-text">If Travel expenses more than this you give an alert.</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">RentandUtilities Expenses Limit</label>
+      <input type="number" class="form-control" id="RentandUtilities" name="RentandUtilities" aria-describedby="emailHelp" value="{{ThresholdsData.RentandUtilitiesLimit}}">
+      <div id="emailHelp" class="form-text">If RentandUtilities expenses more than this you give an alert.</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Shopping Expenses Limit</label>
+      <input type="number" class="form-control" id="Shopping" name="Shopping" aria-describedby="emailHelp" value="{{ThresholdsData.ShoppingLimit}}">
+      <div id="emailHelp" class="form-text">If Shopping expenses more than this you give an alert.</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Medical Expenses Limit</label>
+      <input type="number" class="form-control" id="Medical" name="Medical" aria-describedby="emailHelp" value="{{ThresholdsData.MedicalLimit}}">
+      <div id="emailHelp" class="form-text">If Medical expenses more than this you give an alert.</div>
+      <div id="emailHelp" class="form-text">Note: Medical expenses are emergency expenses. Please save some money every month in savings and add that amount entry in savings page. </div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">OtherExpenses Expenses Limit</label>
+      <input type="number" class="form-control" id="OtherExpenses" name="OtherExpenses" aria-describedby="emailHelp" value="{{ThresholdsData.OtherExpensesLimit}}">
+      <div id="emailHelp" class="form-text">If OtherExpenses are more than this you give an alert.</div>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  </div>
+
+
+
+<div class="card">
+    <!-- Notifications -->
+    <h5 class="card-header">Notifications Management</h5>
+    <div class="card-body">
+      <span
+        >As per below checks you will notifications.
+        <span class="notificationRequest"><strong>Please Select and save the changes</strong></span></span
+      >
+      <div class="error"></div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped table-borderless border-bottom">
+        <thead>
+          <tr>
+            <th class="text-nowrap">Type</th>
+            <th class="text-nowrap text-center">✉️ Email</th>
+            <th class="text-nowrap text-center">🖥 Message</th>
+          </tr>
+        </thead>
+        <tbody>
+         
+          <tr>
+            <td class="text-nowrap">Account activity</td>
+            <td>
+              <div class="form-check d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" id="defaultCheck4" checked />
+              </div>
+            </td>
+            <td>
+              <div class="form-check d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" id="defaultCheck5" checked />
+              </div>
+            </td>
+           
+          </tr>
+          <tr>
+            <td class="text-nowrap">A new browser used to sign in</td>
+            <td>
+              <div class="form-check d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" id="defaultCheck7" checked />
+              </div>
+            </td>
+            <td>
+              <div class="form-check d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" id="defaultCheck8" checked />
+              </div>
+            </td>
+          
+          </tr>
+          <tr>
+            <td class="text-nowrap">Meet more Expenses rather than the month salary</td>
+            <td>
+              <div class="form-check d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" id="defaultCheck10" checked />
+              </div>
+            </td>
+            <td>
+              <div class="form-check d-flex justify-content-center">
+                <input class="form-check-input" type="checkbox" id="defaultCheck11" />
+              </div>
+            </td>
+         
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card-body">
+      <h6>Get expenses reports every</h6>
+      <form action="javascript:void(0);">
+        <div class="row">
+          <div class="col-sm-6">
+            <select id="sendNotification" class="form-select" name="sendNotification">
+              <option selected>Month</option>
+              <option>Week</option>
+            </select>
+          </div>
+          <div class="mt-4">
+            <button type="submit" class="btn btn-primary me-2">Save changes</button>
+            <button type="reset" class="btn btn-outline-secondary">Discard</button>
+          </div>
+        </div>
+      </form>
+    </div>
+</div>
+
+
+  {% endblock content %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+        {{ message | safe }}
+    </div>
+{% endfor %}
+
+<div class="bg-light p-5 rounded">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">HospitalName</label>
+      <input type="text" class="form-control" id="HospitalName" name="HospitalName" aria-describedby="emailHelp" value="{{UpdateColValue.HospitalName}}" >
+      <div id="emailHelp" class="form-text">HospitalName</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">DiseaseName</label>
+      <input type="text" class="form-control" id="DiseaseName" name="DiseaseName" aria-describedby="emailHelp" value="{{UpdateColValue.DiseaseName}}" >
+      <div id="emailHelp" class="form-text">DiseaseName</div>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Prescription</label>
+        <input type="file" class="form-control" id="Prescription" name="Prescription">
+        <div id="emailHelp" class="form-text">Edit Prescription. Add JPG/PNG</div>
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Time</label>
+        <input type="date" class="form-control" id="Time" name="Time"  value='{{UpdateColValue.Time|date:"Y-m-d"}}' >
+        <div id="emailHelp" class="form-text">Time</div>
+      </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Amount</label>
+      <input type="number" class="form-control" id="Amount" name="Amount" value="{{UpdateColValue.Amount}}">
+      <div id="emailHelp" class="form-text">Total Amount taken</div>
+    </div>
+    
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Proof</label>
+        <input type="file" class="form-control" id="ProofAttachment" name="ProofAttachment">
+        <div id="emailHelp" class="form-text">Add Proof JPG/PNG</div>
+      </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  </div>
+  {% endblock content %}

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+        {{ message | safe }}
+    </div>
+{% endfor %}
+
+<div class="bg-light p-5 rounded">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+   
+  
+      <!-- Account -->
+      <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Username</label>
+        <input type="text" class="form-control" id="TravelledIn" name="Username" aria-describedby="emailHelp" value="{{request.user}}" disabled>
+        <!-- <div id="emailHelp" class="form-text">Travelled In</div> -->
+      </div>
+      <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Issue Type</label>
+        <select id="selectTypeOpt" class="form-select color-dropdown" name="IssueType">
+            <option value="" selected="">----------Please Select----------</option>
+            <option value="LoginIssue">Login issue</option>
+            <option value="ReportIssue">Didn't get reports</option>
+            <option value="PerformanceIssue">Performance Issue</option>
+            <option value="Suggestions">Suggestions</option>
+            <option value="Other">Other</option>
+          </select>
+        <div id="emailHelp" class="form-text">Total Amount taken</div>
+      </div>
+      <div class="input-group">
+        <span class="input-group-text">Description</span>
+        <textarea name="Description" class="form-control" aria-label="With textarea" placeholder="Please type you issue"></textarea>
+      </div>
+      <br>
+      <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+  
+   
+    
+  </form>
+
+
+  
+  <br>
+  <div class="bg-light p-1 rounded">
+    <div id="emailHelp" class="form-text">Note : For more details click on 1st Row. To edit row click on show proof/add proof there you can edit</div>
+    <br>
+    <table id="LoanTable" class="display" style="width:100%">
+      <thead>
+          <tr>
+              <th class="all">S.No</th>
+              <th class="desktop">Time</th>
+              <th class="all">IssueType</th>
+              <th class="desktop">Description</th>
+              <th class="desktop">Status</th>
+              <th class="desktop">Comment</th>
+          </tr>
+      </thead>
+      <!-- <tfoot style="display: table-header-group;">
+        <tr>
+            <th class="all">S.No</th>
+            <th class="desktop">Time</th>
+            <th class="all">IssueType</th>
+            <th class="desktop">Description</th>
+            <th class="desktop">Status</th>
+            <th class="desktop">Comment</th>
+        </tr>
+    </tfoot> -->
+      <tbody>
+        {% for i in SupportData %}
+          <tr>
+              <td>{{forloop.counter}}</td>
+              <td>{{i.Time}}</td>
+              <td>{{i.IssueType}}</td>
+              <td>{{i.Description}}</td>
+              <td>{{i.Status}}</td>
+              <td>{{i.Comment}}</td>
+            </tr>
+          {% endfor %}
+      </tbody>
+      
+  </table>
+  </div>
+  <script>
+    $(function(){
+  $('#LoanTable').DataTable({
+    responsive: true,
+    initComplete: function () {
+            this.api()
+                .columns()
+                .every(function () {
+                    var column = this;
+                    var select = $('<select><option value=""></option></select>')
+                        .appendTo($(column.footer()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+ 
+                            column.search(val ? '^' + val + '$' : '', true, false).draw();
+                        });
+ 
+                    column
+                        .data()
+                        .unique()
+                        .sort()
+                        .each(function (d, j) {
+                            select.append('<option value="' + d + '">' + d + '</option>');
+                        });
+                });
+        },
+  });
+});
+
+//    $(document).ready(function() {
+//     var table = $('#LoanTable').DataTable( {
+
+//         responsive: false
+//     } );
+// } );
+  </script>
+  {% endblock content %}

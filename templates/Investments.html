@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
+{% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+        {{ message | safe }}
+    </div>
+{% endfor %}
+
+<div class="bg-light p-5 rounded">
+    <h1>Welcome {{request.user}}!</h1>
+    <h4>We are working on this Page. Will update very soon.</h4>
+  </div>
+
+{% endblock content %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible shadow fade show" role="alert">
+        {{ message | safe }}
+    </div>
+{% endfor %}
+
+<div class="bg-light p-5 rounded">
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">ItemName</label>
+      <input type="text" class="form-control" id="ItemName" name="ItemName" aria-describedby="emailHelp" value="{{UpdateColValue.ItemName}}" >
+      <div id="emailHelp" class="form-text">Category</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">PurchasedFrom</label>
+      <input type="text" class="form-control" id="PurchasedFrom" name="PurchasedFrom" aria-describedby="emailHelp" value="{{UpdateColValue.PurchasedFrom}}" >
+      <div id="emailHelp" class="form-text">PurchasedFrom</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Time</label>
+      <input type="date" class="form-control" id="Time" name="Time"  value='{{UpdateColValue.Time|date:"Y-m-d"}}' >
+      <div id="emailHelp" class="form-text">Time</div>
+    </div>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Amount</label>
+      <input type="number" class="form-control" id="Amount" name="Amount" value="{{UpdateColValue.Amount}}">
+      <div id="emailHelp" class="form-text">Total Amount taken</div>
+    </div>
+    
+    <div class="mb-3">
+        <label for="exampleInputPassword1" class="form-label">Proof</label>
+        <input type="file" class="form-control" id="ProofAttachment" name="ProofAttachment">
+        <div id="emailHelp" class="form-text">Add Proof JPG/PNG</div>
+      </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+  </form>
+  </div>
+  {% endblock content %}
