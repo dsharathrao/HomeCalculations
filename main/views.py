@@ -1,4 +1,3 @@
-from dataclasses import dataclass
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.http import HttpResponseRedirect
@@ -8,11 +7,9 @@ from django.contrib.auth.decorators import login_required
 from django.apps import apps
 from .models import *
 from django.db.models import Sum
-from django.db.models.functions import TruncMonth
 from .forms import CustomUserCreationForm
-from datetime import date, datetime
+from datetime import datetime
 from dateutil.relativedelta import relativedelta
-import traceback
 import pandas as pd
 import numpy as np
 import json

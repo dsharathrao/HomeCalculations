@@ -1,8 +1,4 @@
-from email.policy import default
-from hashlib import blake2b
 from django.db import models
-from django.utils.text import slugify
-from django.urls import reverse
 from django.contrib.auth import get_user_model
 # Create your models here.
 
@@ -22,6 +18,18 @@ Support_CHOICES = (
     ('cancelled','CANCELLED'),
     ('closed','CLOSED'),
 )
+
+
+class Groups(models.Model):
+    User = models.ForeignKey(get_user_model(), null=True, on_delete=models.CASCADE, related_name='+')
+    GroupName = models.CharField(max_length=100,blank=False,null=False)
+    OtherUsers = models.ManyToManyField(get_user_model(), related_name="+")
+
+    def __str__(self):
+        return str(self.id)
+    class Meta:
+        verbose_name_plural="Groups"
+
 
 class Support(models.Model):
     User = models.ForeignKey(get_user_model(), null=True, on_delete=models.CASCADE)

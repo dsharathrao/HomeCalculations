@@ -31,6 +31,16 @@
 	 <script src="{% static 'js/config.js' %}"></script>
 
 	 <link href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" rel="stylesheet" />
+	 <style>
+		@media (max-width: 400px) {
+			.creategroup{
+				display: none;
+			}
+		}
+		.creategroup{
+			padding: 30px;
+		}
+	 </style>
 
 	</head>
 	<body>
@@ -152,7 +162,32 @@
 					</ul>
 				  </li> -->
 				  <li class="menu-header small text-uppercase">
-					<span class="menu-header-text">Savings</span>
+					<span class="menu-header-text">Groups</span>
+				  </li>
+
+				  <li class="menu-item {% if url_name == 'SalaryCredited' %}active {% endif %}">
+					<a
+					  href="#"
+					  
+					  class="menu-link"
+					>
+					  <i class="menu-icon tf-icons bx bx-group"></i>
+					  <div data-i18n="Other">Create New Group</div>
+					</a>
+				  </li>
+				  <li class="menu-item {% if url_name == 'Investments' %}active {% endif %}">
+					<a
+					  href="#"
+					  
+					  class="menu-link"
+					>
+					  <i class="menu-icon tf-icons bx bx-cog"></i>
+					  <div data-i18n="Other">Manage Groups</div>
+					</a>
+				  </li>
+				
+				  <li class="menu-header small text-uppercase">
+					<span class="menu-header-text">Savings (Optional)</span>
 				  </li>
 
 				  <li class="menu-item {% if url_name == 'SalaryCredited' %}active {% endif %}">
@@ -289,6 +324,9 @@
 					<ul class="navbar-nav flex-row align-items-center ms-auto">
 					  <!-- Place this tag where you want the button to render. -->
 					  <!-- User -->
+					  	<div class="creategroup">
+					  		<button type="submit" class="btn btn-primary">Create Group</button>
+						</div>
 					  <li class="nav-item navbar-dropdown dropdown-user dropdown">
 						<a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
 						  <div class="avatar avatar-online">

@@ -2,6 +2,10 @@ from django.contrib import admin
 from .models import *
 
 
+class GroupsAdmin(admin.ModelAdmin):
+    model = Loan
+    list_display = ('GroupName', 'User',)
+
 class LoanAdmin(admin.ModelAdmin):
     model = Loan
     list_display = ('User','Time','LoanTaken','Amount','EMIMonth','EMIAmount','Paid','Proof',)
@@ -37,6 +41,8 @@ class SupportAdmin(admin.ModelAdmin):
 class ThresholdsAdmin(admin.ModelAdmin):
     model = Thresholds
     list_display = ('User', 'FoodLimit', 'TravelLimit', 'RentandUtilitiesLimit','ShoppingLimit', 'MedicalLimit', 'OtherExpensesLimit',)
+
+admin.site.register(Groups, GroupsAdmin)
 admin.site.register(Thresholds, ThresholdsAdmin)
 admin.site.register(Loan,LoanAdmin)
 admin.site.register(Food, FoodAdmin)
