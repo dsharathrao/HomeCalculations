@@ -165,9 +165,9 @@
 					<span class="menu-header-text">Groups</span>
 				  </li>
 
-				  <li class="menu-item {% if url_name == 'SalaryCredited' %}active {% endif %}">
+				  <li class="menu-item {% if url_name == 'NewGroups' %}active {% endif %}">
 					<a
-					  href="#"
+					  href="{% url 'NewGroups' %}"
 					  
 					  class="menu-link"
 					>
@@ -175,9 +175,9 @@
 					  <div data-i18n="Other">Create New Group</div>
 					</a>
 				  </li>
-				  <li class="menu-item {% if url_name == 'Investments' %}active {% endif %}">
+				  <li class="menu-item {% if url_name == 'ManageGroups' %}active {% endif %}">
 					<a
-					  href="#"
+					  href="{% url 'ManageGroups' %}"
 					  
 					  class="menu-link"
 					>

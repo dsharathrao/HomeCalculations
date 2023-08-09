@@ -662,6 +662,17 @@ def SupportView(request):
     return render(request, 'Support.html',context = context)
 
 
+@login_required(login_url='login')
+def NewGroupsView(request):
+    username = User.objects.get(username=request.user.username)
+    return render(request, 'NewGroup.html',context = {})
+
+
+@login_required(login_url='login')
+def ManageGroupsView(request):
+    username = User.objects.get(username=request.user.username)
+    return render(request, 'NewGroup.html',context = {})
+
 
 @login_required(login_url='login')
 def NotificationsView(request):

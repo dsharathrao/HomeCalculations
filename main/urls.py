@@ -8,6 +8,10 @@ urlpatterns = [
     path('login/',login_page,name='login'),
     path('logout/', logoutUser, name="logout"),
     path("register/", registerUser, name="register"),
+
+    path('NewGroups/', NewGroupsView, name='NewGroups'),
+    path('ManageGroups/', ManageGroupsView, name='ManageGroups'),
+
     path('Profile-Update/',UserprofileView, name="Profile-Update"),
     path('Notifications/',NotificationsView, name="Notifications"),
     path('Support/',SupportView, name='Support'),
